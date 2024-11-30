@@ -33,6 +33,16 @@
 	&._8 {
 		@apply rounded-br-xl;
 	}
+	&.X {
+		@apply text-red-400;
+	}
+	&.O {
+		@apply text-blue-400;
+	}
+	&.empty {
+		@apply text-transparent;
+		@apply hover:bg-gray-50 hover:text-slate-400 hover:text-lg;
+	}
 }
 
 .dark-toggle {

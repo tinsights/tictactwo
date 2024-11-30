@@ -6,15 +6,16 @@ import "./App.css";
 
 interface SquareProps {
   idx: number;
+	turn: boolean
   value: string | null;
   onSquareClick: () => void;
 }
 
-function Square({idx, value, onSquareClick }: SquareProps) {
-
+function Square({idx, value, turn, onSquareClick }: SquareProps) {
+	const next = turn ? "X" : "O";
   return (
-    <div className={`square _${idx}`} onClick={onSquareClick}>
-      {value}
+		<div className={`square _${idx} ${value ? value : "empty"}`} onClick={onSquareClick}>
+      {value ? value : next}
     </div>
   );
 }
@@ -75,12 +76,12 @@ function Grid() {
           <div key={row} className="row">
             {[0, 1, 2].map((col) => {
               const idx = row * 3 + col;
-              return <Square key={idx} idx={idx} value={squares[idx]} onSquareClick={() => handleSquareClick(idx)} />;
+              return <Square key={idx} idx={idx} value={squares[idx]} turn={xIsNext} onSquareClick={() => handleSquareClick(idx)} />;
             })}
           </div>
         ))}
       </div>
-      <Button variant="default" size="default" onClick={() => setSquares(Array(9).fill(null))}>
+      <Button variant="default" size="default" onClick={() => {setSquares(Array(9).fill(null)); setWinner(null); setXIsNext(true);}}>
         Reset
       </Button>
     </>
