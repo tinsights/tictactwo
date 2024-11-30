@@ -70,8 +70,8 @@ function Grid() {
   }
   return (
     <>
+			<h2 className="font-mono text-2xl text-amber-500">Tic Tac Two</h2>
       <div className="grid">
-        <div className="status">{winner ? `Winner: ${winner}` : `Next player: ${xIsNext ? "X" : "O"}`}</div>
         {[0, 1, 2].map((row) => (
           <div key={row} className="row">
             {[0, 1, 2].map((col) => {
