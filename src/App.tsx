@@ -2,6 +2,7 @@ import React from "react";
 import { Toggle } from "./components/ui/toggle";
 import { Button } from "./components/ui/button";
 import { useState, useEffect } from "react";
+import JSConfetti from "js-confetti";
 import "./App.css";
 
 interface SquareProps {
@@ -27,6 +28,7 @@ function Grid() {
   const [oMoves, setOMoves] = useState(Array(0));
   const [winner, setWinner] = useState<string | null>(null);
 
+
   useEffect(() => {
     const lines = [
       [0, 1, 2],
@@ -42,6 +44,8 @@ function Grid() {
       const [a, b, c] = lines[i];
       if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
         setWinner(squares[a]);
+				const jsConfetti = new JSConfetti();
+				jsConfetti.addConfetti();
       }
     }
   }, [squares]);
@@ -81,7 +85,7 @@ function Grid() {
           </div>
         ))}
       </div>
-      <Button variant="default" size="default" onClick={() => {setSquares(Array(9).fill(null)); setWinner(null); setXIsNext(true);}}>
+      <Button variant="default" size="default" onClick={() => {setSquares(Array(9).fill(null)); setWinner(null); setXIsNext(true); setXMoves(Array(0)); setOMoves(Array(0))}}>
         Reset
       </Button>
     </>
