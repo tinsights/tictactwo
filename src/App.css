@@ -1,4 +1,8 @@
-body {
+
+.status {
+	@apply mb-2;
+}
+.game {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -6,10 +10,7 @@ body {
 	height: 100vh;
 }
 
-.status {
-	@apply mb-2;
-}
-.app {
+.grid {
 	@apply flex flex-col justify-center items-center;
 }
 
@@ -18,5 +19,23 @@ body {
 }
 
 .square {
-	@apply border-black border w-12 h-12 flex justify-center items-center;
+	@apply border-black border w-20 h-20 flex justify-center items-center;
+	@apply dark:bg-gray-300;
+	&._0 {
+		@apply rounded-tl-xl;
+	}
+	&._2 {
+		@apply rounded-tr-xl;
+	}
+	&._6 {
+		@apply rounded-bl-xl;
+	}
+	&._8 {
+		@apply rounded-br-xl;
+	}
+}
+
+.dark-toggle {
+	@apply absolute top-0 right-0 m-4 bg-gray-100;
+	@apply dark:bg-gray-800 dark:text-white;
 }
