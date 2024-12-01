@@ -9,17 +9,19 @@ import "./App.css";
 interface SquareProps {
 	idx: number;
 	turn: boolean
+	gameOver: boolean;
 	value: 'X' | 'O' | null;
 	onSquareClick: () => void;
 }
 
-function Square({ idx, value, turn, onSquareClick }: SquareProps) {
+function Square({ idx, value, turn, gameOver, onSquareClick }: SquareProps) {
 	const next = turn ? "X" : "O";
 	return (
 		<div className={
 			classnames({
 				square: true,
-				empty: !value,
+				hover: !value && !gameOver,
+				"text-transparent": !value,
 				"rounded-tl-xl": idx === 0,
 				"rounded-tr-xl": idx === 2,
 				"rounded-bl-xl": idx === 6,
@@ -70,17 +72,19 @@ function Grid() {
 		}
 		newSquares[idx] = xIsNext ? "X" : "O";
 		if (xIsNext) {
-			xMoves.push(idx);
-			setXMoves(xMoves);
-			if (xMoves.length >= 4) {
-				newSquares[xMoves[xMoves.length - 4]] = null;
+			const xMovesCopy = xMoves.slice();
+			xMovesCopy.push(idx);
+			if (xMovesCopy.length >= 4) {
+				newSquares[xMovesCopy[xMovesCopy.length - 4]] = null;
 			}
+			setXMoves(xMovesCopy);
 		} else {
-			oMoves.push(idx);
-			setOMoves(oMoves);
-			if (oMoves.length >= 4) {
-				newSquares[oMoves[oMoves.length - 4]] = null;
+			const oMovesCopy = oMoves.slice();
+			oMovesCopy.push(idx);
+			if (oMovesCopy.length >= 4) {
+				newSquares[oMovesCopy[oMovesCopy.length - 4]] = null;
 			}
+			setOMoves(oMovesCopy);
 		}
 		setXIsNext(!xIsNext);
 		setSquares(newSquares);
@@ -108,6 +112,7 @@ function Grid() {
 								key={idx}
 								idx={idx}
 								value={squares[idx]}
+								gameOver={!!winner}
 								turn={xIsNext}
 								onSquareClick={() => handleSquareClick(idx)}
 							/>;

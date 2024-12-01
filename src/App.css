@@ -18,10 +18,8 @@
   @apply text-4xl;
   @apply dark:bg-gray-300;
   @apply cursor-default;
-  &.empty {
-    @apply text-transparent;
-    @apply hover:bg-gray-50 hover:text-slate-400 hover:text-lg;
-    @apply hover:cursor-pointer;
+  &.hover {
+    @apply hover:bg-gray-50 hover:text-slate-400 hover:text-lg hover:cursor-pointer;
   }
 }
 
