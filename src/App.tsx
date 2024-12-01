@@ -55,11 +55,9 @@ function Grid() {
 		for (let i = 0; i < valid_wins.length; i++) {
 			const [a, b, c] = valid_wins[i];
 			if (newSquares[a] && newSquares[a] === newSquares[b] && newSquares[a] === newSquares[c]) {
-				document.startViewTransition(() => {
-					setWinner(newSquares[a]);
-					const confetti = new JSConfetti();
-					confetti.addConfetti();
-				});
+				setWinner(newSquares[a]);
+				const confetti = new JSConfetti();
+				confetti.addConfetti();
 				break;
 			}
 		}
@@ -85,9 +83,7 @@ function Grid() {
 			}
 		}
 		setXIsNext(!xIsNext);
-		document.startViewTransition(() => {
-			setSquares(newSquares);
-		});
+		setSquares(newSquares);
 		checkWins(newSquares);
 	}
 
@@ -103,12 +99,18 @@ function Grid() {
 	return (
 		<>
 			<h2 className="font-mono text-2xl text-amber-500">Tic Tac Two</h2>
-			<div className="grid">
+			<div className="flex flex-col justify-center items-center;">
 				{[0, 1, 2].map((row) => (
-					<div key={row} className="row">
+					<div key={row} className="flex justify-center;">
 						{[0, 1, 2].map((col) => {
 							const idx = row * 3 + col;
-							return <Square key={idx} idx={idx} value={squares[idx]} turn={xIsNext} onSquareClick={() => handleSquareClick(idx)} />;
+							return <Square
+								key={idx}
+								idx={idx}
+								value={squares[idx]}
+								turn={xIsNext}
+								onSquareClick={() => handleSquareClick(idx)}
+							/>;
 						})}
 					</div>
 				))}
@@ -130,9 +132,9 @@ function App() {
 
 	const toggleDarkMode = () => {
 		document.startViewTransition(() => {
-			const prevMode = isDarkMode;
-			setIsDarkMode(prevMode);
-			document.body.classList.toggle("dark", prevMode);
+			const nextMode = !isDarkMode;
+			setIsDarkMode(nextMode);
+			document.body.classList.toggle("dark", nextMode);
 		});
 	};
 
