@@ -1,50 +1,31 @@
-
 .status {
-	@apply mb-2;
+  @apply mb-2;
 }
 .game {
-	@apply flex flex-col justify-center items-center h-screen gap-10;
+  @apply flex flex-col justify-center items-center h-screen gap-10;
 }
 
 .grid {
-	@apply flex flex-col justify-center items-center;
+  @apply flex flex-col justify-center items-center;
 }
 
 .row {
-	@apply flex justify-center;
+  @apply flex justify-center;
 }
 
 .square {
-	@apply border-black border w-20 h-20 flex justify-center items-center;
-	@apply text-4xl;
-	@apply dark:bg-gray-300;
-	@apply cursor-default;
-	&._0 {
-		@apply rounded-tl-xl;
-	}
-	&._2 {
-		@apply rounded-tr-xl;
-	}
-	&._6 {
-		@apply rounded-bl-xl;
-	}
-	&._8 {
-		@apply rounded-br-xl;
-	}
-	&.X {
-		@apply text-red-400;
-	}
-	&.O {
-		@apply text-blue-400;
-	}
-	&.empty {
-		@apply text-transparent;
-		@apply hover:bg-gray-50 hover:text-slate-400 hover:text-lg;
-		@apply hover:cursor-pointer;
-	}
+  @apply border-black border w-20 h-20 flex justify-center items-center;
+  @apply text-4xl;
+  @apply dark:bg-gray-300;
+  @apply cursor-default;
+  &.empty {
+    @apply text-transparent;
+    @apply hover:bg-gray-50 hover:text-slate-400 hover:text-lg;
+    @apply hover:cursor-pointer;
+  }
 }
 
 .dark-toggle {
-	@apply absolute top-0 right-0 m-4 bg-gray-100;
-	@apply dark:bg-gray-800 dark:text-white;
+  @apply absolute top-0 right-0 m-4 bg-gray-100;
+  @apply dark:bg-gray-800 dark:text-white;
 }

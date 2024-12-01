@@ -1,21 +1,33 @@
 import React from "react";
 import { Toggle } from "./components/ui/toggle";
 import { Button } from "./components/ui/button";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import JSConfetti from "js-confetti";
+import classnames from "classnames";
 import "./App.css";
 
 interface SquareProps {
 	idx: number;
 	turn: boolean
-	value: string | null;
+	value: 'X' | 'O' | null;
 	onSquareClick: () => void;
 }
 
 function Square({ idx, value, turn, onSquareClick }: SquareProps) {
 	const next = turn ? "X" : "O";
 	return (
-		<div className={`square _${idx} ${value ? value : "empty"}`} onClick={onSquareClick}>
+		<div className={
+			classnames({
+				square: true,
+				empty: !value,
+				"rounded-tl-xl": idx === 0,
+				"rounded-tr-xl": idx === 2,
+				"rounded-bl-xl": idx === 6,
+				"rounded-br-xl": idx === 8,
+				"text-red-400": value === "X",
+				"text-blue-400": value === "O",
+			})}
+			onClick={onSquareClick}>
 			{value ? value : next}
 		</div>
 	);
@@ -29,34 +41,29 @@ function Grid() {
 	const [winner, setWinner] = useState<string | null>(null);
 
 
-	useEffect(() => {
-		const lines = [
+	const checkWins = (newSquares: Array<string>) => {
+		const valid_wins = [
 			[0, 1, 2],
 			[3, 4, 5],
-			[6, 7, 8], // rows
+			[6, 7, 8],
 			[0, 3, 6],
 			[1, 4, 7],
-			[2, 5, 8], // columns
+			[2, 5, 8],
 			[0, 4, 8],
-			[2, 4, 6], // diagonals
+			[2, 4, 6],
 		];
-		for (let i = 0; i < lines.length; i++) {
-			const [a, b, c] = lines[i];
-			if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+		for (let i = 0; i < valid_wins.length; i++) {
+			const [a, b, c] = valid_wins[i];
+			if (newSquares[a] && newSquares[a] === newSquares[b] && newSquares[a] === newSquares[c]) {
 				document.startViewTransition(() => {
-					setWinner(squares[a]);
+					setWinner(newSquares[a]);
+					const confetti = new JSConfetti();
+					confetti.addConfetti();
 				});
+				break;
 			}
 		}
-	}, [squares]);
-
-	useEffect(() => {
-		if (winner) {
-			const confetti = new JSConfetti();
-			confetti.addConfetti();
-		}
-
-	}, [winner]);
+	};
 
 	function handleSquareClick(idx: number) {
 		const newSquares = squares.slice();
@@ -81,6 +88,7 @@ function Grid() {
 		document.startViewTransition(() => {
 			setSquares(newSquares);
 		});
+		checkWins(newSquares);
 	}
 
 	const reset = () => {
@@ -122,13 +130,12 @@ function App() {
 
 	const toggleDarkMode = () => {
 		document.startViewTransition(() => {
-			setIsDarkMode((prevMode) => !prevMode);
+			const prevMode = isDarkMode;
+			setIsDarkMode(prevMode);
+			document.body.classList.toggle("dark", prevMode);
 		});
 	};
 
-	useEffect(() => {
-		document.body.classList.toggle("dark", isDarkMode);
-	}, [isDarkMode]);
 	return (
 		<>
 			<Toggle className="dark-toggle" onPressedChange={toggleDarkMode}>
