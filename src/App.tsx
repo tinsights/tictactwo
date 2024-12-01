@@ -6,94 +6,119 @@ import JSConfetti from "js-confetti";
 import "./App.css";
 
 interface SquareProps {
-  idx: number;
+	idx: number;
 	turn: boolean
-  value: string | null;
-  onSquareClick: () => void;
+	value: string | null;
+	onSquareClick: () => void;
 }
 
-function Square({idx, value, turn, onSquareClick }: SquareProps) {
+function Square({ idx, value, turn, onSquareClick }: SquareProps) {
 	const next = turn ? "X" : "O";
-  return (
+	return (
 		<div className={`square _${idx} ${value ? value : "empty"}`} onClick={onSquareClick}>
-      {value ? value : next}
-    </div>
-  );
+			{value ? value : next}
+		</div>
+	);
 }
 
 function Grid() {
-  const [squares, setSquares] = useState(Array(9).fill(null));
-  const [xIsNext, setXIsNext] = useState(true);
-  const [xMoves, setXMoves] = useState(Array(0));
-  const [oMoves, setOMoves] = useState(Array(0));
-  const [winner, setWinner] = useState<string | null>(null);
+	const [squares, setSquares] = useState(Array(9).fill(null));
+	const [xIsNext, setXIsNext] = useState(true);
+	const [xMoves, setXMoves] = useState(Array(0));
+	const [oMoves, setOMoves] = useState(Array(0));
+	const [winner, setWinner] = useState<string | null>(null);
 
 
-  useEffect(() => {
-    const lines = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8], // rows
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8], // columns
-      [0, 4, 8],
-      [2, 4, 6], // diagonals
-    ];
-    for (let i = 0; i < lines.length; i++) {
-      const [a, b, c] = lines[i];
-      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-        setWinner(squares[a]);
-				const jsConfetti = new JSConfetti();
-				jsConfetti.addConfetti();
-      }
-    }
-  }, [squares]);
+	useEffect(() => {
+		const lines = [
+			[0, 1, 2],
+			[3, 4, 5],
+			[6, 7, 8], // rows
+			[0, 3, 6],
+			[1, 4, 7],
+			[2, 5, 8], // columns
+			[0, 4, 8],
+			[2, 4, 6], // diagonals
+		];
+		for (let i = 0; i < lines.length; i++) {
+			const [a, b, c] = lines[i];
+			if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+				document.startViewTransition(() => {
+					setWinner(squares[a]);
+				});
+			}
+		}
+	}, [squares]);
 
-  function handleSquareClick(idx: number) {
-    const newSquares = squares.slice();
-    if (newSquares[idx] || winner) {
-      return;
-    }
-    newSquares[idx] = xIsNext ? "X" : "O";
-    if (xIsNext) {
-      xMoves.push(idx);
-      setXMoves(xMoves);
-      if (xMoves.length >= 4) {
-        newSquares[xMoves[xMoves.length - 4]] = null;
-      }
-    } else {
-      oMoves.push(idx);
-      setOMoves(oMoves);
-      if (oMoves.length >= 4) {
-        newSquares[oMoves[oMoves.length - 4]] = null;
-      }
-    }
-    setXIsNext(!xIsNext);
-    setSquares(newSquares);
-  }
-  return (
-    <>
+	useEffect(() => {
+		if (winner) {
+			const confetti = new JSConfetti();
+			confetti.addConfetti();
+		}
+
+	}, [winner]);
+
+	function handleSquareClick(idx: number) {
+		const newSquares = squares.slice();
+		if (newSquares[idx] || winner) {
+			return;
+		}
+		newSquares[idx] = xIsNext ? "X" : "O";
+		if (xIsNext) {
+			xMoves.push(idx);
+			setXMoves(xMoves);
+			if (xMoves.length >= 4) {
+				newSquares[xMoves[xMoves.length - 4]] = null;
+			}
+		} else {
+			oMoves.push(idx);
+			setOMoves(oMoves);
+			if (oMoves.length >= 4) {
+				newSquares[oMoves[oMoves.length - 4]] = null;
+			}
+		}
+		setXIsNext(!xIsNext);
+		document.startViewTransition(() => {
+			setSquares(newSquares);
+		});
+	}
+
+	const reset = () => {
+		setXIsNext(true);
+		setXMoves(Array(0));
+		setOMoves(Array(0));
+		setWinner(null);
+		document.startViewTransition(() => {
+			setSquares(Array(9).fill(null));
+		})
+	}
+	return (
+		<>
 			<h2 className="font-mono text-2xl text-amber-500">Tic Tac Two</h2>
-      <div className="grid">
-        {[0, 1, 2].map((row) => (
-          <div key={row} className="row">
-            {[0, 1, 2].map((col) => {
-              const idx = row * 3 + col;
-              return <Square key={idx} idx={idx} value={squares[idx]} turn={xIsNext} onSquareClick={() => handleSquareClick(idx)} />;
-            })}
-          </div>
-        ))}
-      </div>
-      <Button variant="default" size="default" onClick={() => {setSquares(Array(9).fill(null)); setWinner(null); setXIsNext(true); setXMoves(Array(0)); setOMoves(Array(0))}}>
-        Reset
-      </Button>
-    </>
-  );
+			<div className="grid">
+				{[0, 1, 2].map((row) => (
+					<div key={row} className="row">
+						{[0, 1, 2].map((col) => {
+							const idx = row * 3 + col;
+							return <Square key={idx} idx={idx} value={squares[idx]} turn={xIsNext} onSquareClick={() => handleSquareClick(idx)} />;
+						})}
+					</div>
+				))}
+			</div>
+			<Button
+				variant="default"
+				size="default"
+				disabled={!winner}
+				className={`reset ${winner ? "visible" : "invisible"}`}
+				onClick={reset}>
+				Reset
+			</Button>
+		</>
+	);
 }
 
 function App() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+	const [isDarkMode, setIsDarkMode] = useState(false);
 
 	const toggleDarkMode = () => {
 		document.startViewTransition(() => {
@@ -104,16 +129,16 @@ function App() {
 	useEffect(() => {
 		document.body.classList.toggle("dark", isDarkMode);
 	}, [isDarkMode]);
-  return (
-    <>
-      <Toggle className="dark-toggle" onPressedChange={toggleDarkMode}>
-        {isDarkMode ? "🌖" : "🌘"}
-      </Toggle>
-      <div className="game">
-        <Grid />
-      </div>
-    </>
-  );
+	return (
+		<>
+			<Toggle className="dark-toggle" onPressedChange={toggleDarkMode}>
+				{isDarkMode ? "🌖" : "🌘"}
+			</Toggle>
+			<div className="game">
+				<Grid />
+			</div>
+		</>
+	);
 }
 
 export default App;
