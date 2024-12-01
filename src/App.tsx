@@ -95,15 +95,18 @@ function Grid() {
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
-  const toggleDarkMode = () => {
-    setIsDarkMode((prevMode) => !prevMode);
-  };
-  useEffect(() => {
-    document.body.classList.toggle("dark", isDarkMode);
-  }, [isDarkMode]);
+	const toggleDarkMode = () => {
+		document.startViewTransition(() => {
+			setIsDarkMode((prevMode) => !prevMode);
+		});
+	};
+
+	useEffect(() => {
+		document.body.classList.toggle("dark", isDarkMode);
+	}, [isDarkMode]);
   return (
     <>
-      <Toggle className="dark-toggle" onPressedChange={() => toggleDarkMode()}>
+      <Toggle className="dark-toggle" onPressedChange={toggleDarkMode}>
         {isDarkMode ? "🌖" : "🌘"}
       </Toggle>
       <div className="game">
