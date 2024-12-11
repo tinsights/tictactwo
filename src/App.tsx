@@ -48,8 +48,11 @@ export default function App() {
 	};
 
 	const handleMouseMove = (ev: React.MouseEvent) => {
-		const { pageX, pageY } = ev;
-		// console.log({ pageX, pageY });
+		let { pageX, pageY } = ev;
+		console.log(ev);
+		pageX = pageX / window.innerWidth;
+		pageY = pageY / window.innerHeight;
+		console.log({ pageX, pageY })
 		socket.emit('message', { pageX, pageY });
 	}
 
@@ -70,7 +73,7 @@ export default function App() {
 				<Grid />
 			</div >
 			{Object.entries(cursors).map(([id, cursor]: [string, CursorType]) => (
-				<Cursor key={id} pageX={cursor.pageX} pageY={cursor.pageY} color={"blue"} />
+				(socket.id !== id) && <Cursor key={id} pageX={cursor.pageX * window.innerWidth} pageY={cursor.pageY * window.innerHeight} color={"blue"} />
 			))}
 		</>
 	);
