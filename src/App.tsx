@@ -6,8 +6,38 @@ import "./App.css";
 import { socket } from ".";
 
 
+const Cursor = ({ pageX, pageY, color }: CursorType) => {
+	return (
+		<div
+			className="cursor"
+			style={{
+				height: "20px",
+				width: "20px",
+				left: `${pageX}px`,
+				top: `${pageY}px`,
+				backgroundColor: color,
+				position: 'fixed',
+				pointerEvents: 'none',
+				borderRadius: '100%'
+			}}
+		/>
+	);
+};
+
+
+interface CursorType {
+	pageX: number;
+	pageY: number;
+	color: string;
+}
+
+interface CursorMap {
+	[id: string]: CursorType; // Map user IDs to their cursor positions
+}
+
 export default function App() {
 	const [isDarkMode, setIsDarkMode] = useState(false);
+	const [cursors, setCursors] = useState<CursorMap>({});
 
 	const toggleDarkMode = () => {
 		document.startViewTransition(() => {
@@ -24,8 +54,10 @@ export default function App() {
 	}
 
 	useEffect(() => {
-		socket.on('message', (msg) => {
-			console.log("received broadcast:", msg)
+		socket.on('message', (connObj: CursorMap) => {
+			// console.log("received broadcast:", connObj)
+			setCursors(connObj);
+			// console.log(cursors);
 		})
 	})
 
@@ -37,6 +69,9 @@ export default function App() {
 			<div className="game" onMouseMove={handleMouseMove}>
 				<Grid />
 			</div >
+			{Object.entries(cursors).map(([id, cursor]: [string, CursorType]) => (
+				<Cursor key={id} x={cursor.pageX} y={cursor.pageY} color={"blue"} />
+			))}
 		</>
 	);
 }

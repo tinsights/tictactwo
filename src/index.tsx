@@ -8,7 +8,7 @@ import { io } from 'socket.io-client';
 export const socket = io('ws://localhost:4000');
 
 socket.on('connect', () => {
-	console.log('WebSocket connected');
+	console.log('WebSocket connected', socket.id);
 });
 
 const root = ReactDOM.createRoot(
