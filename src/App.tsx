@@ -70,7 +70,7 @@ export default function App() {
 				<Grid />
 			</div >
 			{Object.entries(cursors).map(([id, cursor]: [string, CursorType]) => (
-				<Cursor key={id} x={cursor.pageX} y={cursor.pageY} color={"blue"} />
+				<Cursor key={id} pageX={cursor.pageX} pageY={cursor.pageY} color={"blue"} />
 			))}
 		</>
 	);
