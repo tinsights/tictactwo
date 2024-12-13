@@ -32,7 +32,7 @@ interface CursorType {
 }
 
 interface CursorMap {
-	[id: string]: CursorType; // Map user IDs to their cursor positions
+	[id: string]: CursorType;
 }
 
 export default function App() {
@@ -52,7 +52,7 @@ export default function App() {
 		console.log(ev);
 		pageX = pageX / window.innerWidth;
 		pageY = pageY / window.innerHeight;
-		console.log({ pageX, pageY })
+		// console.log({ pageX, pageY })
 		socket.emit('message', { pageX, pageY });
 	}
 
