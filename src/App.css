@@ -24,6 +24,13 @@
 }
 
 .dark-toggle {
-  @apply absolute top-0 right-0 m-4 bg-gray-100;
   @apply dark:bg-gray-800 dark:text-white;
+}
+
+.chat-bubble {
+  transition: ease-in-out;
+}
+.hide {
+  transition: ease-in-out;
+  display: none;
 }

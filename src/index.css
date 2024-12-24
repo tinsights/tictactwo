@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer base {
+  #root {
+    @apply h-lvh;
+  }
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 47.4% 11.2%;
@@ -55,5 +58,6 @@
   }
   body {
     @apply font-sans antialiased bg-background text-foreground;
+    @apply h-lvh;
   }
 }
