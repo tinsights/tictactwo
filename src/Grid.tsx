@@ -46,9 +46,13 @@ export default function Grid() {
 		setXMoves(Array(0));
 		setOMoves(Array(0));
 		setWinner(null);
-		document.startViewTransition(() => {
+		try {
+			document.startViewTransition(() => {
+				setSquares(Array(9).fill(null));
+			})
+		} catch {
 			setSquares(Array(9).fill(null));
-		})
+		}
 	}
 	return (
 		<>

@@ -9,13 +9,19 @@ export default function App() {
 	const [isDarkMode, setIsDarkMode] = useState(false);
 
 	const toggleDarkMode = () => {
-		document.startViewTransition(() => {
+		try {
+			document.startViewTransition(() => {
+				const nextMode = !isDarkMode;
+				setIsDarkMode(nextMode);
+				document.body.classList.toggle("dark", nextMode);
+			});
+		} catch (error) {
 			const nextMode = !isDarkMode;
 			setIsDarkMode(nextMode);
 			document.body.classList.toggle("dark", nextMode);
-		});
+		}
 	};
-
+	
 	return (
 		<>
 			<Toggle className="dark-toggle" onPressedChange={toggleDarkMode}>
