@@ -58,7 +58,7 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({ message, pageX, pageY }) => {
 
 	return (
 		<div
-			className={`chat-bubble ${!isVisible ? 'fade-out' : ''}`}
+			className={`chat-bubble`}
 			style={{
 				position: 'fixed',
 				height: "auto",
@@ -72,7 +72,7 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({ message, pageX, pageY }) => {
 				boxShadow: '0 2px 10px rgba(0, 0, 0, 0.2)',
 				pointerEvents: 'none', // Prevent mouse events
 				opacity: isVisible ? 1 : 0,
-				transition: 'opacity 0.5s ease-in-out', // Transition for fading effect
+				transition: 'opacity 0.5s ease-out', // Transition for fading effect
 			}}
 		>
 			{message}

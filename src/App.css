@@ -27,10 +27,3 @@
   @apply dark:bg-gray-800 dark:text-white;
 }
 
-.chat-bubble {
-  transition: ease-in-out;
-}
-.hide {
-  transition: ease-in-out;
-  display: none;
-}
